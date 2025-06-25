@@ -17,9 +17,6 @@ QuickBuy is a full-featured and customizable ordering system designed for seamle
 ---
 
 ## 🛠 Tech Stack
-
-> Update this section based on your actual project setup.
-
 **Frontend**
 - React,js / Typescript
 - Native css
