@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('product', function (Blueprint $table) {
             $table->id('product_id')->primary()->autoIncrement(false);
             $table->string('name');
+            $table->string('category');
             $table->decimal('price', 10 ,2);
             $table->integer('stock');
             $table->string('description');
