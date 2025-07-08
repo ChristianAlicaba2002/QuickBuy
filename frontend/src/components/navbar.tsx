@@ -20,6 +20,16 @@ export default function NavbarComponent() {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItem, setCartItem] = useState<TCartItem[]>([]);
+  // const [checkout, setCheckout] = useState<TCartItem>({
+  //   product_id: 0,
+  //   name: "",
+  //   category: "",
+  //   price: 0,
+  //   stock: 0,
+  //   quantity: 0,
+  //   description: "",
+  //   image: ""
+  // });
   const [isLoading, setIsLoading] = useState(true);
   const [itemTotal, setItemTotal] = useState(0);
   const [checkedItems, setCheckedItems] = useState<{ [productId: string]: boolean }>({});
@@ -79,6 +89,58 @@ export default function NavbarComponent() {
       userItemCart();
     }
   }, [userAuth.user_id]);
+
+  const checkOutItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Filter checked items and include quantity
+    const checkedCartItems = cartItem
+        .filter((item) => checkedItems[item.product_id])
+        .map((item) => ({
+          ...item,
+          quantity: quantity[item.product_id] ?? item.quantity,
+        }));
+
+    if (checkedCartItems.length === 0) {
+      alert("Please select items to checkout.");
+      return;
+    }
+    const checkOutItemObject = {
+      user_id: userAuth.user_id,
+      checkedCartItems
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/userOrder", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${userAuth.user_id}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          checkOutItemObject
+        }),
+      });
+
+      if (!response.ok) {
+        console.error("Checkout failed.");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Checkout successful:", data.data);
+
+      // Optionally clear checked items and reset state
+      setCheckedItems({});
+      setTotal(0);
+      setIsCartOpen(false);
+
+      // You may also want to refresh the cart
+    } catch (error) {
+      console.error("Checkout error:", error);
+    }
+  };
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -293,7 +355,7 @@ export default function NavbarComponent() {
                     <p>Total: &#8369; {total.toLocaleString("en-PH")}</p>
                   </div>
                   <div className="checkout-container">
-                    <form>
+                    <form onSubmit={checkOutItem} method="POST" encType="multipart/form-data">
                       <button type="submit">Check out</button>
                     </form>
                   </div>
