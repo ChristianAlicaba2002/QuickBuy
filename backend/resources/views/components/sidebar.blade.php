@@ -30,6 +30,12 @@
                     </a>
                 </li>
                 <li>
+                    <img src="../../../assets/wall-clock.png" alt="logo img">
+                    <a href="{{route('order-pending')}}" class="list-item">
+                        Order's Pending
+                    </a>
+                </li>
+                <li>
                     <img src="../../../assets/archive.png" alt="logo img">
                     <a href="{{route('archive')}}" class="list-item">
                         Archived
