@@ -7,17 +7,6 @@ import { useUser } from "@clerk/clerk-react";
 
 export default function CardComponent(props: TProducts) {
   const [userId, setUserId] = useState<string>("");
-  // const [CartItem, setCartItem] = useState<TAddToCart>({
-  //   user_id: "",
-  //   product_id: 0,
-  //   name: "",
-  //   category: "",
-  //   price: 0,
-  //   stock: 0,
-  //   quantity: 0,
-  //   description: "",
-  //   image: "",
-  // })
 
   //Get the User ID
   const { user } = useUser();
@@ -30,23 +19,6 @@ export default function CardComponent(props: TProducts) {
   //Add item in the user cart
   const addToCart = async (e: React.FormEvent) => {
     e.preventDefault();
-
-
-    //Set the specific item details
-    // setCartItem((prev) => ({
-    //   ...prev,
-    //   user_id: userId,
-    //   product_id: props.product_id,
-    //   name: props.name,
-    //   category: props.category,
-    //   price: props.price,
-    //   stock: props.stock,
-    //   quantity: quantity += 1,
-    //   description: props.description,
-    //   image: props.image,
-    // })
-
-    // );
 
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/addToCart/${props.product_id}`, {
@@ -100,7 +72,7 @@ export default function CardComponent(props: TProducts) {
         </div>
         <div className="button-container">
           <form onSubmit={addToCart}>
-            <ButtonComponent name="Add to cart" />
+            <ButtonComponent name="Add to Cart" stock={props.stock} />
           </form>
         </div>
       </div>

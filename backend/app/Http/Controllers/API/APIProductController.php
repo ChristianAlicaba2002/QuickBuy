@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 class APIProductController extends Controller
 {
-    
+
     public function allProducts()
     {
         $products = Products::all();
@@ -20,20 +20,23 @@ class APIProductController extends Controller
         ], 200);
     }
 
-    // public function searchProduct($category)
-    // {
-    //     $product = Products::where('category' , $category);
-    //     if(!$product)
-    //     {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => 'Item not found'
-    //         ],404);
-    //     }
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'Item retrieve successfully',
-    //         'data' => $product
-    //     ],200);
-    // }
+    public function searchProduct(Request $request)
+    {
+        $name = $request->query('search');
+        
+        $products = Products::where('name', 'LIKE', '%' . $name . '%')->get();
+
+        if ($products->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No products found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Products retrieved successfully',
+            'data' => $products
+        ], 200);
+    }
 }

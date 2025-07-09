@@ -56,8 +56,9 @@
   border: 1px solid rgba(0, 0, 0, 0.26);
   font-size: 1rem;
   outline: 0;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
+  /* border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px; */
+  border-radius: 7px;
 }
 .search-container input[type="search"]:focus {
   border: 1px solid rgba(0, 0, 0, 0.534);
@@ -80,7 +81,7 @@
 }
 .addToCart-container {
   position: absolute;
-  background-color: rgba(230, 250, 255, 0.653);
+  background-color: rgb(230, 250, 255);
   margin-top: 0.1%;
   z-index: 3;
   min-height: 70vh;

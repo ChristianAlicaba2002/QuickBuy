@@ -15,26 +15,23 @@ function AuthRedirect() {
   return null;
 }
 
-export default function NavbarComponent() {
+type Props = {
+  search: string;
+  setSearch: (value: string) => void;
+};
+
+export default function NavbarComponent({ setSearch }: Props) {
   const { user, isSignedIn } = useUser();
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItem, setCartItem] = useState<TCartItem[]>([]);
-  // const [checkout, setCheckout] = useState<TCartItem>({
-  //   product_id: 0,
-  //   name: "",
-  //   category: "",
-  //   price: 0,
-  //   stock: 0,
-  //   quantity: 0,
-  //   description: "",
-  //   image: ""
-  // });
+
   const [isLoading, setIsLoading] = useState(true);
   const [itemTotal, setItemTotal] = useState(0);
   const [checkedItems, setCheckedItems] = useState<{ [productId: string]: boolean }>({});
   const [quantity, setQuantity] = useState<{ [productId: string]: number }>({});
   const [total, setTotal] = useState(0);
+  // const [isSearching, setIsSearching] = useState(false);
   const [userAuth, setUserAuth] = useState<TUser>({
     user_id: "",
     first_name: "",
@@ -59,7 +56,7 @@ export default function NavbarComponent() {
       await fetch("http://127.0.0.1:8000/api/users", {
         method: "POST",
         headers: {
-          Authorization: `Bearer: ${userAuth.user_id}`,
+          Authorization: `Bearer ${userAuth.user_id}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userAuth),
@@ -90,16 +87,27 @@ export default function NavbarComponent() {
     }
   }, [userAuth.user_id]);
 
+
+  const searchItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  // const handleSearch = async () => {
+  //   setIsSearching(true);
+  //   await new Promise((resolve) => setTimeout(resolve, 500));
+
+  //   setIsSearching(false);
+  // };
   const checkOutItem = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Filter checked items and include quantity
     const checkedCartItems = cartItem
-        .filter((item) => checkedItems[item.product_id])
-        .map((item) => ({
-          ...item,
-          quantity: quantity[item.product_id] ?? item.quantity,
-        }));
+      .filter((item) => checkedItems[item.product_id])
+      .map((item) => ({
+        ...item,
+        quantity: quantity[item.product_id] ?? item.quantity,
+      }));
 
     if (checkedCartItems.length === 0) {
       alert("Please select items to checkout.");
@@ -140,8 +148,6 @@ export default function NavbarComponent() {
       console.error("Checkout error:", error);
     }
   };
-
-
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -175,7 +181,7 @@ export default function NavbarComponent() {
       const newQty = Math.min(item.stock, currentQty + 1);
 
       if (checkedItems[item.product_id]) {
-        setTotal((prevTotal) => prevTotal + item.price);
+        setTotal((prevTotal) => prevTotal * item.price);
       }
 
       return {
@@ -237,8 +243,11 @@ export default function NavbarComponent() {
                 title="search your product"
                 type="search"
                 placeholder="Search products..."
+                onChange={searchItem}
               />
-              <button type="submit">Search</button>
+              {/* <button type="submit" onClick={handleSearch} disabled={isSearching}>
+                {isSearching ? "Searching..." : "Search"}
+              </button> */}
             </div>
             <div className="right-side">
               <div className="cart-container">

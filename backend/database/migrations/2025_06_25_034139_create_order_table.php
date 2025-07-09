@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order', function (Blueprint $table) {
             $table->integer('order_id')->primary()->autoIncrement(true);
-            $table->foreignId('product_Id')->references('product_id')->on('product')->onDelete('cascade');
+            $table->foreignId('product_id')->references('product_id')->on('product')->onDelete('cascade');
             $table->string('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->string('product_name');
             $table->decimal('price', 10 ,2);

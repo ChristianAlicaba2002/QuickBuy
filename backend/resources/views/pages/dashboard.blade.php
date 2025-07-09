@@ -29,22 +29,22 @@
 
     <div class="main-container">
 
-         <div class="header-section" style="">
+        <div class="header-section" style="">
             <div class="box" style="">
                 <h3>Total Products</h3>
-                <p style="">{{ count($products) ?? 0}}</p>
+                <p style="">{{ count($products) ?? 0 }}</p>
             </div>
             <div class="box" ">
                 <h3>Low Stock</h3>
-                <p style="color: red">{{ $lowStockCount ?? 0}}</p>
+                <p style="color: red">{{ $lowStockCount ?? 0 }}</p>
+            </div>
+            <div class="box">
+                <h3>Total Orders</h3>
+                <p>{{ $getAllOrders ?? 0 }}</p>
             </div>
             <div class="box">
                 <h3>Total Revenue</h3>
                 <p>&#8369;{{ number_format($totalRevenue ?? 0, 2) }}</p>
-            </div>
-            <div class="box">
-                <h3>Total Orders</h3>
-                <p>{{ $totalOrders ?? 0 }}</p>
             </div>
         </div>
 
@@ -129,7 +129,7 @@
                     </div>
                     <div>
                         <label for="image">Image:</label>
-                        <input type="file" id="imageId" name="image" required>
+                        <input type="file" id="imageId" name="image" accept="image/*">
                     </div>
                     <div>
                         <img src="" alt="" id="imagePreviewId" srcset=""
@@ -166,131 +166,135 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($products) > 0)
-                        @foreach ($products as $item)
-                            <tr>
-                                <td>{{ $item->product_id }}</td>
-                                <td>
-                                    <img src="{{ asset('/images/' . $item->image) }}" alt="{{ $item->name }}"
-                                        width="100px" height="50px">
-                                </td>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->category }}</td>
-                                <td>&#8369;{{ $item->price }}</td>
-                                <td>{{ $item->stock }}</td>
-                                <td><textarea name="description" id="" cols="20" rows="5" readonly>{{ $item->description }}</textarea></td>
-                               <td>{{ $item->created_at->format('F d, Y') }}</td>
-                                <td>
-                                    <div class="action-btn">
-                                        
-                                        <button title="edit" class="edit-btn" type="button" onclick="editProduct('{{ $item->product_id }}' , '{{ $item->name }}' ,'{{$item->category}}','{{ $item->description }}' , '{{ $item->price }}' , '{{ $item->stock }}' , '{{ $item->image }}')">
-                                            <img  src="../../assets/edit.png" alt="Edit icon">
-                                        </button>
-                                        <form action="{{route('archive.product', $item->product_id)}}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button title="archive" class="delete-btn" type="submit">
-                                                <img  src="../../assets/archive (1).png" alt="Delete icon">   
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="8" style="text-align: center; color: red; font-size: 1.1rem; padding: 15px 0;">No products available</td>
-                        </tr>
-                    @endif
+                     @if (count($products) > 0)
+                @foreach ($products as $item)
+                    <tr>
+                        <td>{{ $item->product_id }}</td>
+                        <td>
+                            <img src="{{ asset('/images/' . $item->image) }}" alt="{{ $item->name }}"
+                                width="100px" height="50px">
+                        </td>
+                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->category }}</td>
+                        <td>&#8369;{{ $item->price }}</td>
+                        <td style="color: {{$item->stock > 11 ? 'green' : 'red'}}">{{ $item->stock }}</td>
+                        <td>
+                            <textarea name="description" id="" cols="20" rows="5" readonly>{{ $item->description }}</textarea>
+                        </td>
+                        <td>{{ $item->created_at->format('F d, Y') }}</td>
+                        <td>
+                            <div class="action-btn">
+
+                                <button title="edit" class="edit-btn" type="button"
+                                    onclick="editProduct('{{ $item->product_id }}' , '{{ $item->name }}' ,'{{ $item->category }}','{{ $item->description }}' , '{{ $item->price }}' , '{{ $item->stock }}' , '{{ $item->image }}')">
+                                    <img src="../../assets/edit.png" alt="Edit icon">
+                                </button>
+                                <form action="{{ route('archive.product', $item->product_id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button title="archive" class="delete-btn" type="submit">
+                                        <img src="../../assets/archive (1).png" alt="Delete icon">
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="8" style="text-align: center; color: red; font-size: 1.1rem; padding: 15px 0;">No
+                        products available</td>
+                </tr>
+                @endif
                 </tbody>
-            </table>
+                </table>
+            </div>
+
         </div>
 
-    </div>
-
-    <script>
-        const modal = document.getElementById('productModal');
-        const btn = document.getElementById('addProductBtn');
-        const editbtn = document.getElementById('closeEditModal');
-        const span = document.getElementById('closeModal');
-        btn.onclick = function() {
-            modal.style.display = 'block';
-        }
-        span.onclick = function() {
-            modal.style.display = 'none';
-        }
-        editbtn.onclick = function() {
-            const editModal = document.getElementById('editProductModal');
-            editModal.style.display = 'none';
-        }
-        window.onclick = function(event) {
-            if (event.target == modal) {
+        <script>
+            const modal = document.getElementById('productModal');
+            const btn = document.getElementById('addProductBtn');
+            const editbtn = document.getElementById('closeEditModal');
+            const span = document.getElementById('closeModal');
+            btn.onclick = function() {
+                modal.style.display = 'block';
+            }
+            span.onclick = function() {
                 modal.style.display = 'none';
             }
-        }
-
-        // Function to handle image preview
-        document.getElementById('image').addEventListener('change', function(event) {
-            const preview = document.getElementById('imagePreview');
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = '';
-                preview.style.display = 'none';
+            editbtn.onclick = function() {
+                const editModal = document.getElementById('editProductModal');
+                editModal.style.display = 'none';
             }
-        });
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
 
-        // Function to populate the modal with product data for editing
-        function editProduct(id, name,category, description, price, stock, image) {
-            const modal = document.getElementById('editProductModal');
-            modal.style.display = 'block';
-
-            document.getElementById('nameId').value = name;
-            document.getElementById('categoryId').value = category;
-            document.getElementById('descriptionId').value = description;
-            document.getElementById('priceId').value = price;
-            document.getElementById('stockId').value = stock;
-            document.getElementById('imageId').value = ''; // Reset file input
-            document.getElementById('imagePreviewId').src = `/${image}/`;
-
-            // Update form action to include product ID for editing
-            const form = modal.querySelector('form');
-            form.method = "POST";
-            form.enctype = "multipart/form-data";
-            form.action =  `update/${id}`;
-        }
-
-
-        // Search functionality
-        // This script filters the table rows based on the search input
-        document.getElementById('search').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
-
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                let found = false;
-
-                cells.forEach(cell => {
-                    if (cell.textContent.toLowerCase().includes(searchTerm)) {
-                        found = true;
+            // Function to handle image preview
+            document.getElementById('image').addEventListener('change', function(event) {
+                const preview = document.getElementById('imagePreview');
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
                     }
-                });
-
-                if (found) {
-                    row.style.display = '';
+                    reader.readAsDataURL(file);
                 } else {
-                    row.style.display = 'none';
+                    preview.src = '';
+                    preview.style.display = 'none';
                 }
             });
-        });
-    </script>
+
+            // Function to populate the modal with product data for editing
+            function editProduct(id, name, category, description, price, stock, image) {
+                const modal = document.getElementById('editProductModal');
+                modal.style.display = 'block';
+
+                document.getElementById('nameId').value = name;
+                document.getElementById('categoryId').value = category;
+                document.getElementById('descriptionId').value = description;
+                document.getElementById('priceId').value = price;
+                document.getElementById('stockId').value = stock;
+                document.getElementById('imageId').value = ''; // Reset file input
+                document.getElementById('imagePreviewId').src = `/${image}/`;
+
+                // Update form action to include product ID for editing
+                const form = modal.querySelector('form');
+                form.method = "POST";
+                form.enctype = "multipart/form-data";
+                form.action = `update/${id}`;
+            }
+
+
+            // Search functionality
+            // This script filters the table rows based on the search input
+            document.getElementById('search').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('tbody tr');
+
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    let found = false;
+
+                    cells.forEach(cell => {
+                        if (cell.textContent.toLowerCase().includes(searchTerm)) {
+                            found = true;
+                        }
+                    });
+
+                    if (found) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        </script>
 </body>
 
 </html>

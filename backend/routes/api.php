@@ -13,7 +13,7 @@ Route::get('/user', function (Request $request) {
 
 
 // User API
-Route::post('users', [UserController::class , 'User']);
+Route::post('users', [UserController::class, 'User']);
 
 
 // Product API
@@ -21,8 +21,8 @@ Route::get('/storage/{imageName}', function ($imageName) {
     return response()->file(public_path('images/' . $imageName));
 });
 Route::get('/products', [APIProductController::class, 'allProducts']);
-Route::get('/products/{id}', [APIProductController::class , 'searchProduct']);
-Route::post('/addToCart/{id}', [AddToCartController::class , 'receivedUserAddToCart']);
-Route::get('/userItemCart/{id}', [AddToCartController::class , 'getUserAddToCart']);
-Route::get('/itemInCart', [AddToCartController::class , 'allItemInCart']);
-Route::post('/userOrder',[OrderController::class , 'userOrder']);
+Route::get('/products/search', [APIProductController::class, 'searchProduct']);
+Route::post('/addToCart/{id}', [AddToCartController::class, 'receivedUserAddToCart']);
+Route::get('/userItemCart/{id}', [AddToCartController::class, 'getUserAddToCart']);
+Route::get('/itemInCart', [AddToCartController::class, 'allItemInCart']);
+Route::post('/userOrder', [OrderController::class, 'userOrder']);

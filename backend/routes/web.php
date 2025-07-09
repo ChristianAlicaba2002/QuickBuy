@@ -1,13 +1,16 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Product\ProductController;
-use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\PreventBackHistory;
+use App\Domain\Order\Order;
+use App\Models\Orders;
 use App\Models\Archive;
 use App\Models\Products;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\PreventBackHistory;
+use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Product\ProductController;
 
 Route::get('/', function () {
     if (Auth::guard('admin')->check()) {
@@ -24,20 +27,28 @@ Route::middleware(['auth:admin'])->group(function () {
         //Retrieve all the products
         $products = Products::orderBy('created_at', 'desc')->get();
 
-        //Get the product if it's less than or equal to 10
+        //Get the product if the stock it's less than or equal to 10
         $lowStockCount = Products::where('stock', '<=', 10)->count();
 
-        return view('pages.dashboard', compact('products', 'lowStockCount'));
+        //Get all the orders that have been accepted
+        $getAllOrders = Orders::where('status' ,'=', 'accepted')->count();
+
+        return view('pages.dashboard', compact('products', 'lowStockCount','getAllOrders'));
     })->name('dashboard')->middleware(PreventBackHistory::class, AdminMiddleware::class);
 
-    Route::view('/user-management','pages.userManagement')->name('user-management');
+    Route::view('/user-management', 'pages.userManagement')->name('user-management');
 
-    Route::view("/order-pending", "pages.orderPending")->name('order-pending');
+    Route::get("/order-pending", function () {
+        $orders = Orders::orderBy('created_at', 'desc')->get();
+
+        return view('pages.orderPending', compact('orders'));
+
+    })->name('order-pending')->middleware(AdminMiddleware::class);
 
     Route::get('/archive', function () {
         $archiveProducts = Archive::orderBy('created_at', 'desc')->get();
         return view('pages.archive', compact('archiveProducts'));
-    })->name('archive');
+    })->name('archive')->middleware(AdminMiddleware::class);
 });
 
 
@@ -51,3 +62,6 @@ Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('delet
 Route::delete('/archive/{id}', [ProductController::class, 'archive'])->name('archive.product');
 Route::delete('/restore/{id}', [ProductController::class, 'restore'])->name('restore.product');
 Route::put('/update/{id}', [ProductController::class, 'update'])->name('update.product');
+
+//Orders Routes
+Route::post('pending-order/{id}', [OrderController::class, 'acceptTheUserOrder'])->name('pending.order');
