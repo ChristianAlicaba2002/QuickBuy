@@ -1,0 +1,84 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+}
+.main-container{
+    background-color: rgb(176, 246, 255);
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.forms{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.forms h1{
+    margin-top: -5rem;
+    font-size: 3rem;
+    margin-bottom: .50rem;
+}
+.forms p{
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+.forms label{
+    margin-top: 1.4rem;
+    margin-bottom: .20rem;
+    font-size: 1.3rem;
+}
+.forms input{
+    padding: 1.1rem;
+    outline: 0;
+    border: 0;
+    font-size: 1.2rem;
+    border-bottom: 1px solid black;
+    background-color: transparent;
+    transition: 0.2s ease-in-out;
+}
+
+input[type="checkbox"]
+{
+  width: 20px;
+  height: 16px;
+  background-color: white;
+  border: 2px solid #555;
+  border-radius: 10px;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.forms input:hover{
+    background-color: rgba(128, 128, 128, 0.144);
+}
+
+.button{
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+.button button{
+    outline: 0;
+    border: 0;
+    border-radius: 7px;
+    padding: .90rem;
+    width: 10rem;
+    background-color: rgb(255, 200, 97);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: .2s ease-out;
+}
+.button button:hover{
+    background-color: rgb(255, 166, 0)
+}

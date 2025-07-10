@@ -1,0 +1,90 @@
+body {
+    display: flex;
+    flex-direction: row;
+}
+.pending-order-title{
+    display:flex;
+    flex-direction: row;
+    position: absolute;
+    margin-top: -10rem;
+}
+.pendingOrder-container {
+    width: auto;
+    max-height: 35rem;
+    height: auto;
+    margin-top: 10rem;
+    margin-left: 4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    padding: 24px 16px;
+    border: 1px solid #ccc;
+}
+.pendingOrder-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+}
+thead tr {
+    background: #f2f2f2;
+    position: sticky;
+    top: -1.50rem;
+}
+th,
+td {
+    padding: 12px 42px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+td:nth-child(9){
+    font-weight: bold;
+}
+td label{
+    padding: .70rem;
+    border-radius: 6px;
+}
+.isPending{
+    background-color: rgba(255, 166, 0, 0.199);
+}
+.isAccepted{
+    background-color: rgba(0, 255, 0, 0.321);
+}
+tr:nth-child(even){
+    background: #f9f9f9;
+}
+th {
+    font-weight: bold;
+    color: #222;
+    font-size: .90rem;
+}
+tbody tr:hover {
+    background: #fffdfd;
+}
+
+td img {
+    border-radius: 4px;
+    width: 90px;
+    height: 48px;
+}
+
+td {
+    color: #333;
+    font-size: .90rem;
+    vertical-align: middle;
+}
+button{
+    padding: .60rem;
+    border: 0;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: rgba(0, 28, 128, 0.177);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+button:hover{
+    background-color: rgb(0, 52, 242);
+    color: white;
+}

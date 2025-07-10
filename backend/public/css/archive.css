@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.table-container {
+    width: 100%;
+    margin-left: 10rem;
+}
+
+.table-container h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+}
+
+.table-container p {
+    font-size: 1.2rem;
+}
+
+.table {
+    width: 80%;
+    margin-top: 10%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+.table img {
+    width: 90px;
+    height: 48px;
+}
+
+.table th,
+td {
+    text-align: left;
+    padding: 15px;
+    border: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: rgb(248, 248, 248);
+    padding: 12px 30px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 5rem;
+}
+
+.action-btn img {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border: 0;
+}
+
+.edit-btn,
+.delete-btn {
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+
+.edit-btn,
+.delete-btn {
+    margin-right: 8px;
+}
+
+.edit-btn:last-child,
+.delete-btn:last-child {
+    margin-right: 0;
+}
